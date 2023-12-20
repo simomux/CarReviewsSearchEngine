@@ -6,7 +6,7 @@ output_directory = f'Directory/Output/Directory/'
 with open(input_csv_file, 'r', newline='', encoding='utf-8') as csv_file:
     csv_reader = csv.reader(csv_file)
     next(csv_reader, None)      # Skippa l'intestazione della tabella
-    for i in range(0,500):     # Il for è solo per testing, per create tutti i file sostiuire con un 'While True:'
+    for i in range(0,500):     # Il for è solo per testing, per creare tutti i file sostiuire con un 'While True:'
         next(csv_reader, None)
         second_row = next(csv_reader, None)
         if second_row is None:
