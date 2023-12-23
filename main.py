@@ -13,14 +13,10 @@ if __name__ == "__main__":
     counter = 1
     bckp = []
 
-    with open(input_csv_file, 'r', encoding='utf-8') as file:
-        num_lines = 300000 # sum(1 for line in file if line.strip())
-
     with open(input_csv_file, 'r', newline='', encoding='utf-8') as csv_file:
         csv_reader = csv.reader(csv_file)
         next(csv_reader, None)  # Skippa l'intestazione della tabella
         for row in csv_reader: # _ in tqdm(range(num_lines), desc="Creating Files", unit="file"):
-            # row = next(csv_reader, None)
             if bckp != row[0:3]:
                 counter = 1
             bckp = row[0:3]
