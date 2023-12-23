@@ -18,19 +18,16 @@ if __name__ == "__main__":
 
     with open(input_csv_file, 'r', newline='', encoding='utf-8') as csv_file:
         csv_reader = csv.reader(csv_file)
-        print(num_lines)
         next(csv_reader, None)  # Skippa l'intestazione della tabella
-        for _ in tqdm(range(num_lines), desc="Creating Files", unit="file"):
-            next(csv_reader, None)
-            second_row = next(csv_reader, None)
-            if second_row is None:
-                continue
-            if bckp != second_row[0:3]:
+        for row in csv_reader: # _ in tqdm(range(num_lines), desc="Creating Files", unit="file"):
+            # row = next(csv_reader, None)
+            if bckp != row[0:3]:
                 counter = 1
-            bckp = second_row[0:3]
-            output_txt_file = output_directory + f'{second_row[0]}_{second_row[1]}_{second_row[2]}_{counter}.txt'
+            bckp = row[0:3]
+            output_txt_file = output_directory + f'{row[0]}_{row[1]}_{row[2]}_{counter}.txt'
             counter += 1
 
             with open(output_txt_file, 'w', encoding='utf-8') as txt_file:
-                for element in second_row:
+                for element in row:
                     txt_file.write(element.strip() + '\n')
+                        
