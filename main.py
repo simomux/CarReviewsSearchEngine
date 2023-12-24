@@ -1,6 +1,7 @@
 import csv
 import sys
-from tqdm import tqdm
+import os
+# from tqdm import tqdm
 
 
 if __name__ == "__main__":
@@ -20,7 +21,7 @@ if __name__ == "__main__":
             if bckp != row[0:3]:
                 counter = 1
             bckp = row[0:3]
-            output_txt_file = output_directory + f'{row[0]}_{row[1]}_{row[2]}_{counter}.txt'
+            output_txt_file = os.path.join(output_directory, f'{row[0]}_{row[1]}_{row[2]}_{counter}.txt')
             counter += 1
 
             with open(output_txt_file, 'w', encoding='utf-8') as txt_file:
