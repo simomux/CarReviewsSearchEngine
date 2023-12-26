@@ -1,8 +1,12 @@
 import csv
 import sys
 import os
+import time
 
 if __name__ == "__main__":
+    
+    tic = time.perf_counter()
+    
     if len(sys.argv) < 2:
         raise Exception('Please provide an input file!')
 
@@ -31,3 +35,7 @@ if __name__ == "__main__":
             with open(output_txt_file, 'w', encoding='utf-8') as txt_file:
                 for element in row:
                     txt_file.write(element.strip() + '\n')
+    
+    toc = time.perf_counter()
+    elapsed_time = toc - tic
+    print(elapsed_time)
