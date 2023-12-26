@@ -20,7 +20,6 @@ def process_row(row, counters_dict, output_directory):
             txt_file.write(element.strip() + '\n')
 
 if __name__ == "__main__":
-    
     tic = time.perf_counter()
     
     if len(sys.argv) < 2:
@@ -37,20 +36,10 @@ if __name__ == "__main__":
     
     with open(input_csv_file, 'r', newline='', encoding='utf-8') as csv_file:
         csv_reader = csv.reader(csv_file)
-        next(csv_reader, None)  # Skip header row
+        rows = list(csv_reader)[1:]
         
-        # Use ThreadPoolExecutor to process rows in parallel
-        with ThreadPoolExecutor() as executor:
-            futures = []
-
-            for row in csv_reader:
-                # Submit the processing of each row as a separate thread
-                future = executor.submit(process_row, row, counters_dict, output_directory)
-                futures.append(future)
-
-            # Wait for all threads to complete
-            for future in futures:
-                future.result()
+    with ThreadPoolExecutor() as executor:
+        [executor.submit(process_row, row, counters_dict, output_directory) for row in rows]
     
     toc = time.perf_counter()
     elapsed_time = toc - tic
