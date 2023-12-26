@@ -2,10 +2,11 @@ import csv
 import sys
 import os
 from concurrent.futures import ThreadPoolExecutor
-
+from tqdm import tqdm
 import time
 
-def process_row(row, counters_dict, output_directory):
+def process_row(args):
+    row, counters_dict, output_directory = args
     key = tuple(row[0:3])
     counter = counters_dict.get(key, 0) + 1
     counters_dict[key] = counter
@@ -19,7 +20,7 @@ def process_row(row, counters_dict, output_directory):
         for element in row:
             txt_file.write(element.strip() + '\n')
 
-if __name__ == "__main__":
+def main():
     tic = time.perf_counter()
     
     if len(sys.argv) < 2:
@@ -36,11 +37,28 @@ if __name__ == "__main__":
     
     with open(input_csv_file, 'r', newline='', encoding='utf-8') as csv_file:
         csv_reader = csv.reader(csv_file)
-        rows = list(csv_reader)[1:]
-        
+        next(csv_reader, None)  # Skip header row
+        rows = list(csv_reader)
+
     with ThreadPoolExecutor() as executor:
-        [executor.submit(process_row, row, counters_dict, output_directory) for row in rows]
-    
+        
+        # tqdm prende un iteratore e la lunghezza massima
+        # ad ogni iterazione aggiorna la barra
+        
+        # executor è un aggreggato di tanti oggetti che
+        # verranno eseguiti, viene applicato process_row
+        # su ogni row di rows (ottenuta leggendo il csv)
+        
+        for _ in tqdm(
+            executor.map(
+                process_row,
+                [(row, counters_dict, output_directory) for row in rows]),
+            total=len(rows)):
+            pass
+
     toc = time.perf_counter()
     elapsed_time = toc - tic
-    print(elapsed_time)
+    print(f"Total time: {elapsed_time} seconds")
+
+if __name__ == "__main__":
+    main()
