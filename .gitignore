@@ -1,2 +1,5 @@
 *.csv
 myenv/
+indexdir/
+.DS_Store
+```
