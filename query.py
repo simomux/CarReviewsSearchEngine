@@ -8,14 +8,19 @@ def search_index(query_text):
     with ix.searcher(weighting=bm25f) as searcher:
         query_parser = QueryParser("content", schema=ix.schema)
         query = query_parser.parse(query_text)
-        results = searcher.search(query, limit=25)  # limit=None, filter=True
+        results = searcher.search(query, limit=10)  # limit=None, filter=True
 
+        if len(results) == 0:
+            print("No results found")
+            return
+        
         # Print query results
+        print("\nRESULTS:\n")
         for hit in results:
             print(f"Path: {hit['file']}")
-            # print(hit['content'])
-            print(f"Score: {hit.score}")
-            print("---------------")
+            print(hit['content'])
+            print(f"Score: {round(hit.score,2)}")
+            print("---------------\n")
 
 if __name__ == "__main__":
     print("Query: ")
