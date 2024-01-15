@@ -93,4 +93,4 @@ if __name__ == "__main__":
 
     toc = time.perf_counter()
     elapsed_time = toc - tic
-    print(round(elapsed_time, 2))
+    print("\n\nElapsed time: " + round(elapsed_time, 2))
