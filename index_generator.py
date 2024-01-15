@@ -6,8 +6,9 @@ import string
 from nltk.corpus import stopwords
 from whoosh import index
 from whoosh.analysis import StandardAnalyzer
-from whoosh.fields import Schema, TEXT, NUMERIC  # DATETIME
+from whoosh.fields import Schema, TEXT, NUMERIC, DATETIME
 from whoosh.index import create_in
+from datetime import datetime
 
 nltk.download('punkt')
 nltk.download('stopwords')
@@ -30,7 +31,7 @@ def index_files_in_directory(directory):
         model = TEXT(stored=True),
         year = NUMERIC(stored=True),
         #author=TEXT(stored=True),
-        date = TEXT(stored=True),
+        date = DATETIME(stored=True),
         title = TEXT(stored=True),
         rating = NUMERIC(stored=True),
         content = TEXT(analyzer=StandardAnalyzer(), stored=True)
@@ -65,7 +66,13 @@ def index_files_in_directory(directory):
             fields = content.split('\n')
             # Add document to the index
             print(filename)
-            writer.add_document(file=filename, auto=fields[0], model=fields[1], year=fields[2], date=fields[4], title=fields[5], rating=fields[6], content=fields[7])
+            try:
+                tmpdate=datetime.strptime(fields[4], "%m/%d/%Y")
+            except ValueError:
+                tmpdate=datetime.now()
+
+
+            writer.add_document(file=filename, auto=fields[0], model=fields[1], year=fields[2], date=tmpdate, title=fields[5], rating=fields[6], content=''.join(fields[7:]))
 
     # Committare le modifiche e chiudere il writer
     writer.commit()
@@ -74,7 +81,7 @@ def index_files_in_directory(directory):
 if __name__ == "__main__":
     if len(sys.argv) < 1:
         raise Exception('Please provide the output directory!')
-    if len(sys.argv) > 1:
+    if len(sys.argv) > 2:
         raise Exception('Too many arguments!')
     
     tic = time.perf_counter()
