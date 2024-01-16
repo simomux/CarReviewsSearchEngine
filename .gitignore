@@ -1,7 +1,7 @@
-prova.py
 *.csv
 myenv/
-indexdir/
-Bck_indexdir/
+*indexdir/
+testing/
+__pycache__/
 .DS_Store
 ```
