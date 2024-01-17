@@ -45,7 +45,7 @@ if __name__ == "__main__":
                 print("Fuzzy search: 'word~'")
 
             
-        query_text = input("\nInsert the query:")
+        query_text = input("\nInsert the query: ")
 
         query = query_parser.parse(query_text)
 
@@ -54,16 +54,19 @@ if __name__ == "__main__":
             query_parser.add_plugin(DateParserPlugin())
 
         results = searcher.search(query, limit=10)
-
         if len(results) == 0:
             print("No results found")
-        else:
-            # Print query results
-            print(f"\nRESULTS: {len(results)}\n")
-            for hit in results:
-                print(f"Path: {hit['file']}")
-                print(f"Made on: {hit['date'].date()}")
-                print(hit['content'])
-                print(f"Score: {round(hit.score,2)}")
-                print("---------------\n")
+            exit()
+
+        choiche = input("Do you want to sort results by most recent date? (y/n)\n")
+        if choiche.lower().strip() == "y":
+            results = searcher.search(query, limit=10, sortedby="date", reverse=True)
+        
+        # Print query results
+        print(f"\nRESULTS: {len(results)}\n")
+        for hit in results:
+            print(f"Path: {hit['file']}")
+            print(f"Made on: {hit['date'].date()}")
+            print(f"Score: {round(hit.score,2)}")
+            print("---------------\n")
     
