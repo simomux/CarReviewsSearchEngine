@@ -10,8 +10,8 @@ def index_files_in_directory(directory):
     # Schema definition
     schema = Schema(
         file = STORED,
-        maker = TEXT, # ID(stored=True),
-        model = TEXT,# ID(stored=True),
+        maker = ID(stored=True),
+        model = ID(stored=True),
         year = NUMERIC,
         author = STORED,
         date = DATETIME(stored=True, sortable=True),
