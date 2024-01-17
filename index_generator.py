@@ -1,26 +1,21 @@
 import sys
 import time
-import nltk
 import os
 from whoosh.analysis import StemmingAnalyzer
 from whoosh.fields import Schema, TEXT, NUMERIC, DATETIME, STORED, ID
 from whoosh.index import create_in
 from datetime import datetime
 
-nltk.download('punkt')
-nltk.download('stopwords')
-
-
 def index_files_in_directory(directory):
     # Schema definition
     schema = Schema(
         file = STORED,
-        maker = ID(stored=True),
-        model = ID(stored=True),
+        maker = TEXT(stored=True), # ID(stored=True),
+        model = TEXT(stored=True),# ID(stored=True),
         year = NUMERIC(stored=True),
         author = STORED,
         date = DATETIME,
-        title = TEXT(stored=True),
+        title = STORED,
         rating = NUMERIC(stored=True),
         content = TEXT(analyzer=StemmingAnalyzer())
     )
