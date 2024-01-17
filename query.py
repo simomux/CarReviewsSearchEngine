@@ -45,7 +45,7 @@ if __name__ == "__main__":
         # Show syntax of Full-text queries
         if input_type == "1":
             query_parser.add_plugin(FuzzyTermPlugin())
-            syntax = input("See syntax of queries? (y/n)\n")
+            syntax = input("See syntax of queries? (y/n) ")
             if syntax.lower().strip() == "y":
                 print("\nFull-text search: 'word1 word2'")
                 print("Phrasal search: \"word1 word2\"")
@@ -70,15 +70,20 @@ if __name__ == "__main__":
 
             # Did you mean?
 
-            didyoumean_choiche = input("Did you mean? (y/n)\n")
+            didyoumean_choiche = input("\nDid you mean? (y/n) ")
             if didyoumean_choiche.lower().strip() == "y":
                 new_query = searcher.correct_query(query, query_text)
-                results = searcher.search(new_query.query, limit=10)
-                printResults(results)
+                
+                # CHeck if the query is different from the original one
+                if new_query.string != query_text:
+                    print(f"New query: {new_query.string}")
+                    results = searcher.search(new_query.query, limit=10)
+                    printResults(results)
+                else:
+                    print("No results found")
         else:
             choice = input("Do you want to sort results by most recent date? (y/n)\n")
             if choice.lower().strip() == "y":
                 results = searcher.search(query, limit=10, sortedby="date", reverse=True)
 
             printResults(results, choice)
-            
