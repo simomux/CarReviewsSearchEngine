@@ -4,11 +4,22 @@ from whoosh.scoring import BM25F
 from whoosh.qparser.dateparse import DateParserPlugin
 from whoosh.qparser.plugins import FuzzyTermPlugin
 
+def printResults(results, choice="n"):
+    # Print query results
+    print(f"\nRESULTS: {len(results)}\n")
+    for hit in results:
+        print(f"Path: {hit['file']}")
+        print(f"Title: {hit['title']}")
+        print(f"Author: {hit['author']}")
+        print(f"Made on: {hit['date'].date()}")
+        if choice.lower().strip() != "y":
+            print(f"Score: {round(hit.score,2)}")
+        print("---------------\n")
 
 if __name__ == "__main__":
     ix = index.open_dir("indexdir")  # Open index directory
     bm25f = BM25F(B=0.1, K1=2)
-    with ix.searcher(weighting=bm25f) as searcher:
+    with ix.searcher(weighting=BM25F) as searcher:
         print("Select the type of search:")
         print("1) Search on content")
         print("2) Search on Car Maker")
@@ -56,17 +67,18 @@ if __name__ == "__main__":
         results = searcher.search(query, limit=10)
         if len(results) == 0:
             print("No results found")
-            exit()
 
-        choiche = input("Do you want to sort results by most recent date? (y/n)\n")
-        if choiche.lower().strip() == "y":
-            results = searcher.search(query, limit=10, sortedby="date", reverse=True)
-        
-        # Print query results
-        print(f"\nRESULTS: {len(results)}\n")
-        for hit in results:
-            print(f"Path: {hit['file']}")
-            print(f"Made on: {hit['date'].date()}")
-            print(f"Score: {round(hit.score,2)}")
-            print("---------------\n")
-    
+            # Did you mean?
+
+            didyoumean_choiche = input("Did you mean? (y/n)\n")
+            if didyoumean_choiche.lower().strip() == "y":
+                new_query = searcher.correct_query(query, query_text)
+                results = searcher.search(new_query.query, limit=10)
+                printResults(results)
+        else:
+            choice = input("Do you want to sort results by most recent date? (y/n)\n")
+            if choice.lower().strip() == "y":
+                results = searcher.search(query, limit=10, sortedby="date", reverse=True)
+
+            printResults(results, choice)
+            
