@@ -2,7 +2,7 @@ import sys
 import time
 import os
 from whoosh.analysis import StemmingAnalyzer
-from whoosh.fields import Schema, TEXT, NUMERIC, DATETIME, STORED, ID
+from whoosh.fields import Schema, TEXT, NUMERIC, DATETIME, STORED#, ID
 from whoosh.index import create_in
 from datetime import datetime
 
@@ -10,8 +10,8 @@ def index_files_in_directory(directory):
     # Schema definition
     schema = Schema(
         file = STORED,
-        maker = ID(stored=True),
-        model = ID(stored=True),
+        maker = TEXT(analyzer=None), #ID(stored=True),
+        model = TEXT(analyzer=None), #ID(stored=True),
         year = NUMERIC,
         author = STORED,
         date = DATETIME(stored=True, sortable=True),
