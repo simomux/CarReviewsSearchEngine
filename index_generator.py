@@ -17,7 +17,7 @@ def index_files_in_directory(directory):
         date = DATETIME(stored=True, sortable=True),
         title = STORED,
         rating = NUMERIC,
-        content = TEXT(analyzer=StemmingAnalyzer())
+        content = TEXT(analyzer=StemmingAnalyzer(), stored=True)
     )
 
     # Index directory creation

@@ -1,8 +1,25 @@
 from whoosh import index
-from whoosh.qparser import MultifieldParser #, QueryParser
+from whoosh.qparser import MultifieldParser  # , QueryParser
 from whoosh.scoring import BM25F
-# from whoosh.qparser.dateparse import DateParserPlugin
+#  from whoosh.qparser.dateparse import DateParserPlugin
 from whoosh.qparser.plugins import FuzzyTermPlugin
+from sentiment import sentiment_analysis
+
+
+def uiPrint():
+    print("\n")
+    # Show syntax of Full-text queries
+    syntax = input("See syntax of queries? (y/n) ")
+    if syntax.lower().strip() == "y":
+        print("\nFull-text search: word1 word2")
+        print("Phrasal search: \"word1 word2\"")
+        print("Wildcard search: word*")
+        print("Range search: [word1 TO word2]")
+        print("Proximity search: \"word1 word2\"~N")
+        print("Boolean search: word1 AND word2")
+        print("Fuzzy search: word~")
+        print("Digit 0 for exit")
+
 
 def printResults(results, choice="n"):
     # Print query results
@@ -14,9 +31,8 @@ def printResults(results, choice="n"):
         print(f"Made on: {hit['date'].date()}")
         print(f"Terms: {hit.matched_terms()}")
         if choice.lower().strip() != "y":
-            print(f"Score: {round(hit.score,2)}")
+            print(f"Score: {round(hit.score, 2)}")
         print("---------------\n")
-
 
 
 if __name__ == "__main__":
@@ -34,19 +50,8 @@ if __name__ == "__main__":
         query_parser.add_plugin(FuzzyTermPlugin)
 
         while True:
-            print("\n")
-            # Show syntax of Full-text queries
-            syntax = input("See syntax of queries? (y/n) ")
-            if syntax.lower().strip() == "y":
-                print("\nFull-text search: word1 word2")
-                print("Phrasal search: \"word1 word2\"")
-                print("Wildcard search: word*")
-                print("Range search: [word1 TO word2]")
-                print("Proximity search: \"word1 word2\"~N")
-                print("Boolean search: word1 AND word2")
-                print("Fuzzy search: word~")
-                print("Digit 0 for exit")
-            
+            uiPrint()
+
             query_text = input("\nInsert the query: ")
 
             if query_text == "0":
@@ -58,7 +63,7 @@ if __name__ == "__main__":
             if len(results) == 0:
                 print("No results found")
 
-                # Did you mean?
+                #  Did you mean?
                 didyoumean_choiche = input("\nDid you mean? (y/n) ")
                 if didyoumean_choiche.lower().strip() == "y":
                     try:
@@ -66,19 +71,27 @@ if __name__ == "__main__":
                     except Exception as e:
                         print("Impossible to correct query with this syntax!\n")
                         continue
-                    
+
                     print(f"New query: {new_query.string}")
 
                     # Check if the query is different from the original one
-                    if new_query.string != query_text:
-                        results = searcher.search(new_query.query, limit=10, terms=True)
-                        printResults(results)
-                    else:
+                    if new_query.string == query_text:
                         print("No results found")
-            else:
-                choice = input("Do you want to sort results by most recent date? (y/n) ")
-                if choice.lower().strip() == "y":
-                   results = searcher.search(query, limit=10, sortedby="date", reverse=True)
+                        continue
+                    results = searcher.search(new_query.query, limit=10, terms=True)
 
-                printResults(results, choice)
+                    if len(results) == 0:
+                        print("No results")
+                        continue
 
+                    # Allow did you mean results to get sorted by date
+                    query = new_query.query
+
+            choice = input("Do you want to sort results by most recent date? (y/n) ")
+            if choice.lower().strip() == "y":
+                results = searcher.search(query, limit=10, sortedby="date", reverse=True, terms=True)
+            printResults(results, choice)
+
+            choice = input("Do you want to get the sentiment of the query? (y/n) ")
+            if choice.lower().strip() == "y":
+                sentiment_analysis(results)
