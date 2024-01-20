@@ -1,27 +1,22 @@
 import sys
 import time
-import nltk
 import os
 from whoosh.analysis import StemmingAnalyzer
-from whoosh.fields import Schema, TEXT, NUMERIC, DATETIME, STORED, ID
+from whoosh.fields import Schema, TEXT, NUMERIC, DATETIME, STORED#, ID
 from whoosh.index import create_in
 from datetime import datetime
-
-nltk.download('punkt')
-nltk.download('stopwords')
-
 
 def index_files_in_directory(directory):
     # Schema definition
     schema = Schema(
         file = STORED,
-        maker = ID(stored=True),
-        model = ID(stored=True),
-        year = NUMERIC(stored=True),
+        maker = TEXT(analyzer=None), #ID(stored=True),
+        model = TEXT(analyzer=None), #ID(stored=True),
+        year = NUMERIC,
         author = STORED,
-        date = DATETIME,
-        title = TEXT(stored=True),
-        rating = NUMERIC(stored=True),
+        date = DATETIME(stored=True, sortable=True),
+        title = STORED,
+        rating = NUMERIC,
         content = TEXT(analyzer=StemmingAnalyzer())
     )
 
@@ -44,12 +39,11 @@ def index_files_in_directory(directory):
 
             # Convert date to datetime
             try:
-                tmpdate=datetime.strptime(fields[4], "%m/%d/%Y")
+                tmpdate = datetime.strptime(fields[4], "%m/%d/%Y")
             except ValueError:
-                tmpdate=datetime.now()
-
+                tmpdate = datetime(1970, 1, 1, 0, 0, 0)
             # Add document to index
-            writer.add_document(file=filename, maker=fields[0], model=fields[1], year=fields[2], date=tmpdate, title=fields[5], rating=fields[6], content=''.join(fields[7:]))
+            writer.add_document(file=filename, maker=fields[0], model=fields[1], year=fields[2], author=fields[3], date=tmpdate, title=fields[5], rating=fields[6], content=''.join(fields[7:]))
 
     # Close index writer
     writer.commit()
@@ -68,4 +62,4 @@ if __name__ == "__main__":
 
     toc = time.perf_counter()
     elapsed_time = toc - tic
-    print("\n\nElapsed time: " + round(elapsed_time, 2))
+    print(f"\n\nElapsed time: " + str(round(elapsed_time, 2)))
