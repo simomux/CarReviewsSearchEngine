@@ -5,7 +5,10 @@ from whoosh.analysis import StemmingAnalyzer
 from whoosh.fields import Schema, TEXT, NUMERIC, DATETIME, STORED, ID
 from whoosh.index import create_in
 from datetime import datetime
+from decimal import Decimal
 import sentiment
+
+accuracy = 5
 
 
 def normalize_sentiment(scores):
@@ -16,7 +19,7 @@ def normalize_sentiment(scores):
     sentiment_sum = negative + neutral + positive
 
     # Calcola il valore normalizzato compreso tra -1 e 1
-    normalized_value = (positive - negative) / sentiment_sum if sentiment_sum != 0 else 0
+    normalized_value = ((positive - negative) / sentiment_sum + 1) * 5 if sentiment_sum != 0 else 0
     return normalized_value
 
 
@@ -35,8 +38,7 @@ def index_files_in_directory(directory, type_of_index):
     )
 
     if type_of_index == 'sentiment':
-        schema.add('sentiment_value', NUMERIC(sortable=True, stored=True))
-
+        schema.add('sentiment_value', NUMERIC(int, sortable=True, stored=True, decimal_places=accuracy))
 
     # Index directory creation
     if not os.path.exists("indexdir"):
@@ -55,9 +57,12 @@ def index_files_in_directory(directory, type_of_index):
 
             #  Separate fields by newline
             fields = content.split('\n')
-            #print(filename)
+            # print(filename)
             i += 1
             print(f'\nFile: {i}')
+
+            if i == 10000:
+                break
 
             text = ''.join(fields[7:])
 
@@ -72,7 +77,9 @@ def index_files_in_directory(directory, type_of_index):
             except ValueError:
                 tmp_date = datetime(1970, 1, 1, 0, 0, 0)
             #  Add document to index
-            writer.add_document(file=filename, maker=fields[0], model=fields[1], year=fields[2], author=fields[3],date=tmp_date, title=fields[5], rating=fields[6], content=text, sentiment_value=normalized_value)
+            writer.add_document(file=filename, maker=fields[0], model=fields[1], year=fields[2], author=fields[3],
+                                date=tmp_date, title=fields[5], rating=fields[6], content=text,
+                                sentiment_value=Decimal(round(normalized_value, accuracy)))
 
     # Close index writer
     writer.commit()

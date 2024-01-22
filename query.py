@@ -1,6 +1,7 @@
 from whoosh import index
 from whoosh.qparser import MultifieldParser  # , QueryParser
 from whoosh.scoring import BM25F
+from whoosh.sorting import FieldFacet
 #  from whoosh.qparser.dateparse import DateParserPlugin
 from whoosh.qparser.plugins import FuzzyTermPlugin
 from sentiment import sentiment_analysis
@@ -31,7 +32,7 @@ def printResults(results, choice="n"):
         print(f"Made on: {hit['date'].date()}")
         print(f"Terms: {hit.matched_terms()}")
         if choice.lower().strip() == "b" or choice.lower().strip() == "w":
-            print(f"Sentiment: {hit['sentiment_value']}")
+            print(f"Sentiment: {round(hit['sentiment_value'], 5)}")
         elif choice.lower().strip() != "y":
             print(f"Score: {round(hit.score, 2)}")
 
@@ -40,8 +41,7 @@ def printResults(results, choice="n"):
 
 if __name__ == "__main__":
 
-    index = 'indexdir'
-    ix = index.open_dir(index)  # Open index directory
+    ix = index.open_dir("indexdir")  # Open index directory
     bm25f = BM25F(B=0.1, K1=2)
     with ix.searcher(weighting=bm25f) as searcher:
         boost = {
@@ -112,11 +112,13 @@ if __name__ == "__main__":
 
                 # Specify the sorting order based on the user's choice
                 if sorting.lower().strip() == "b":
-                    results = searcher.search(query, limit=10, sortedby="sentiment_value", reverse=True, terms=True)
+                    sorting_fields = FieldFacet("sentiment_value", reverse=True)
+                    results = searcher.search(query, limit=10, sortedby=sorting_fields, terms=True)
                     printResults(results, sorting)
 
                 elif sorting.lower().strip() == "w":
-                    results = searcher.search(query, limit=10, sortedby="sentiment_value", terms=True)
+                    sorting_fields = FieldFacet("sentiment_value")
+                    results = searcher.search(query, limit=10, sortedby=sorting_fields, terms=True)
                     printResults(results, sorting)
 
                 else:
