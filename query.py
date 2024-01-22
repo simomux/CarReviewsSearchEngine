@@ -30,13 +30,18 @@ def printResults(results, choice="n"):
         print(f"Author: {hit['author']}")
         print(f"Made on: {hit['date'].date()}")
         print(f"Terms: {hit.matched_terms()}")
-        if choice.lower().strip() != "y":
+        if choice.lower().strip() == "b" or choice.lower().strip() == "w":
+            print(f"Sentiment: {hit['sentiment_value']}")
+        elif choice.lower().strip() != "y":
             print(f"Score: {round(hit.score, 2)}")
+
         print("---------------\n")
 
 
 if __name__ == "__main__":
-    ix = index.open_dir("indexdir")  # Open index directory
+
+    index = 'indexdir'
+    ix = index.open_dir(index)  # Open index directory
     bm25f = BM25F(B=0.1, K1=2)
     with ix.searcher(weighting=bm25f) as searcher:
         boost = {
@@ -87,11 +92,32 @@ if __name__ == "__main__":
                     # Allow did you mean results to get sorted by date
                     query = new_query.query
 
+            # Sorting by date
             choice = input("Do you want to sort results by most recent date? (y/n) ")
             if choice.lower().strip() == "y":
                 results = searcher.search(query, limit=10, sortedby="date", reverse=True, terms=True)
             printResults(results, choice)
 
-            choice = input("Do you want to get the sentiment of the query? (y/n) ")
+            # Get sentiment of top 10 values
+            choice = input("Do you want to get the sentiment of the top 10 full-text query? (y/n) ")
             if choice.lower().strip() == "y":
                 sentiment_analysis(results)
+
+            # Sorting by sentiment
+
+            # if index == 'sentiment_index':
+            choice = input("Do you want to sort the results by their sentiment? (y/n) ")
+            if choice.lower().strip() == "y":
+                sorting = input("Do you want to sort the results by best or worst? (b/w) ")
+
+                # Specify the sorting order based on the user's choice
+                if sorting.lower().strip() == "b":
+                    results = searcher.search(query, limit=10, sortedby="sentiment_value", reverse=True, terms=True)
+                    printResults(results, sorting)
+
+                elif sorting.lower().strip() == "w":
+                    results = searcher.search(query, limit=10, sortedby="sentiment_value", terms=True)
+                    printResults(results, sorting)
+
+                else:
+                    print("Invalid")
