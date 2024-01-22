@@ -1,0 +1,7 @@
+*.csv
+myenv/
+*indexdir/
+testing/
+__pycache__/
+.DS_Store
+```

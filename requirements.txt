@@ -1,0 +1,6 @@
+Whoosh~=2.7.4
+tqdm~=4.66.1
+nltk~=3.8.1
+transformers~=4.36.2
+numpy~=1.26.3
+scipy~=1.11.4
