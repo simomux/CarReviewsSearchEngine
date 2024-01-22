@@ -18,7 +18,7 @@ def normalize_sentiment(scores):
 
     sentiment_sum = negative + neutral + positive
 
-    # Calcola il valore normalizzato compreso tra -1 e 1
+    # Normalize the value from 3 different variables to a single one with domain [0:10]
     normalized_value = ((positive - negative) / sentiment_sum + 1) * 5 if sentiment_sum != 0 else 0
     return normalized_value
 
@@ -60,9 +60,6 @@ def index_files_in_directory(directory, type_of_index):
             # print(filename)
             i += 1
             print(f'\nFile: {i}')
-
-            if i == 10000:
-                break
 
             text = ''.join(fields[7:])
 
