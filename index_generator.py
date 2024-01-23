@@ -91,12 +91,16 @@ if __name__ == "__main__":
     # Check arguments
     if len(sys.argv) > 3:
         raise Exception('Too many arguments!')
-    if len(sys.argv) < 2:
+    elif len(sys.argv) < 2:
         raise Exception('Too few arguments!')
-    if len(sys.argv) == 3:
+    elif len(sys.argv) == 2:
+        print("Generating inverted index for Full-Text Search")
+        type_of_index = "full-text"
+    elif len(sys.argv) == 3:
         if sys.argv[2].lower().strip() == 'sentiment':
             type_of_index = "sentiment"
             print("Generating inverted index for sentiment analysis")
+            
 
     if input("Are you sure of your choice? The index generation might take a while (y/n) ").lower() != 'y':
         exit(1)

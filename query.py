@@ -81,7 +81,6 @@ def word2vec(results, query):
 
 
 if __name__ == "__main__":
-    print("\033[2J\033[;H", end='')
     parser = argparse.ArgumentParser("Whoosh Query")
     parser.add_argument(dest='sentiment_indexdir', metavar="DIRECTORY", help="The directory of the index")
 
