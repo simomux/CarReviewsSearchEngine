@@ -126,15 +126,17 @@ if __name__ == "__main__":
                     # Check if the query is different from the original one
                     if new_query.string == query_text:
                         print("No correct query found")
-                        break
+                        continue
                     results = searcher.search(new_query.query, limit=10, terms=True)
 
                     if len(results) == 0:
                         print("No results")
-                        break
+                        continue
 
                     # Allow did you mean results to get sorted by date
                     query = new_query.query
+                else:
+                    continue
 
             # Sorting by date
             choice = input("Do you want to sort results by most recent date? (y/n) ")
