@@ -43,29 +43,3 @@ def index_sentiment(string):
     scores = output[0][0].detach().numpy()
     scores = softmax(scores)
     return scores
-
-
-if __name__ == "__main__":
-    text = """I find this truck to be average. It 
-has the steering thump noise, found in 
-chevy trucks since 1999 that chevy 
-won't solve. Also had mildew smell in 
-the air conditioner, the dealer 
-installed a circuit board to correct 
-this. Also the truck has the common 
-transmisson shudder on acceleration."""
-    encoded_input = tokenizer(text, max_length=max_length, return_tensors='pt', truncation=True)
-
-    output = model(**encoded_input)
-    scores = output[0][0].detach().numpy()
-    scores = softmax(scores)
-
-    print(scores)
-
-    # Ui for printing scores
-    ranking = np.argsort(scores)
-    ranking = ranking[::-1]
-    for i in range(scores.shape[0]):
-        label = config.id2label[ranking[i]]
-        score = scores[ranking[i]]
-        print(f"{i + 1}) {label} {np.round(float(score), 4)}")

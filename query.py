@@ -1,11 +1,9 @@
-import os
 from whoosh import index
 from whoosh.qparser import MultifieldParser  # , QueryParser
 from whoosh.scoring import BM25F
 from whoosh.sorting import FieldFacet
 #   from whoosh.qparser.dateparse import DateParserPlugin
 from whoosh.qparser.plugins import FuzzyTermPlugin
-from sentiment import sentiment_analysis
 import argparse
 
 # Word2Vec modules
@@ -81,10 +79,11 @@ def word2vec(results, query):
 
 
 if __name__ == "__main__":
+    # Argument control
     parser = argparse.ArgumentParser("Whoosh Query")
-    parser.add_argument(dest='sentiment_indexdir', metavar="DIRECTORY", help="The directory of the index")
+    parser.add_argument(dest='indexdir', metavar="DIRECTORY", help="The directory of the index")
 
-    ix = index.open_dir(parser.parse_args().__getattribute__('sentiment_indexdir'))  # Open index directory
+    ix = index.open_dir(parser.parse_args().__getattribute__('indexdir'))  # Open index directory
     bm25f = BM25F(B=0.1, K1=2)
     with ix.searcher(weighting=bm25f) as searcher:
         boost = {
@@ -112,11 +111,13 @@ if __name__ == "__main__":
                 print("No results found")
 
                 #  Did you mean?
-                didyoumean_choiche = input("\nDid you mean? (y/n) ")
-                if didyoumean_choiche.lower().strip() == "y":
+                didyoumean_choice = input("\nDid you mean? (y/n) ")
+                if didyoumean_choice.lower().strip() == "y":
                     try:
                         new_query = searcher.correct_query(query, query_text)
-                    except Exception as e:
+                    except (ValueError, TypeError) as e:
+                        # Some queries with exact matches and long numbers don't work with searcher.correct_query()
+                        # method because of the type they get converted to by the query_parser
                         print("Impossible to correct query with this syntax!\n")
                         continue
 
@@ -124,13 +125,13 @@ if __name__ == "__main__":
 
                     # Check if the query is different from the original one
                     if new_query.string == query_text:
-                        print("No results found")
-                        continue
+                        print("No correct query found")
+                        break
                     results = searcher.search(new_query.query, limit=10, terms=True)
 
                     if len(results) == 0:
                         print("No results")
-                        continue
+                        break
 
                     # Allow did you mean results to get sorted by date
                     query = new_query.query
@@ -141,29 +142,36 @@ if __name__ == "__main__":
                 results = searcher.search(query, limit=10, sortedby="date", reverse=True, terms=True)
             printResults(results, choice)
 
-            # Get sentiment of top 10 values
-            choice = input("Do you want to get the sentiment of the top 10 full-text query? (y/n) ")
-            if choice.lower().strip() == "y":
-                sentiment_analysis(results)
+            if parser.parse_args().__getattribute__('indexdir') == 'sentiment_indexdir':
+                # Import here the sentiment module to avoid loading the model in case of simple Full-Text queries
+                from sentiment import sentiment_analysis
 
-            # Sorting by sentiment
-            choice = input("Do you want to sort the results by their sentiment? (y/n) ")
-            if choice.lower().strip() == "y":
-                sorting = input("Do you want to sort the results by best or worst? (b/w) ")
+                # Get sentiment of top 10 values
+                choice = input("Do you want to get the sentiment of the top 10 full-text query? (y/n) ")
+                if choice.lower().strip() == "y":
+                    # The model was supposed to give both positive negative and neutral sentiment of a review. I
+                    # added this function to show the results of specified queries after the full-text match and
+                    # filter, since in the sorting by sentiment the 3 values get normalized in a single one.
+                    sentiment_analysis(results)
 
-                # Specify the sorting order based on the user's choice
-                if sorting.lower().strip() == "b":
-                    sorting_fields = FieldFacet("sentiment_value", reverse=True)
-                    results = searcher.search(query, limit=10, sortedby=sorting_fields, terms=True)
-                    printResults(results, sorting)
+                # Sorting by sentiment
+                choice = input("Do you want to sort the results by their sentiment? (y/n) ")
+                if choice.lower().strip() == "y":
+                    sorting = input("Do you want to sort the results by best or worst? (b/w) ")
 
-                elif sorting.lower().strip() == "w":
-                    sorting_fields = FieldFacet("sentiment_value")
-                    results = searcher.search(query, limit=10, sortedby=sorting_fields, terms=True)
-                    printResults(results, sorting)
+                    # Specify the sorting order based on the user's choice
+                    if sorting.lower().strip() == "b":
+                        sorting_fields = FieldFacet("sentiment_value", reverse=True)
+                        results = searcher.search(query, limit=10, sortedby=sorting_fields, terms=True)
+                        printResults(results, sorting)
 
-                else:
-                    print("Invalid")
+                    elif sorting.lower().strip() == "w":
+                        sorting_fields = FieldFacet("sentiment_value")
+                        results = searcher.search(query, limit=10, sortedby=sorting_fields, terms=True)
+                        printResults(results, sorting)
+
+                    else:
+                        print("Invalid")
 
             # Still need to be optimized
             choice = input("Do you want to sort results by similarity? (y/n) ")
