@@ -37,6 +37,7 @@ def index_files_in_directory(directory, type_of_index):
         content=TEXT(analyzer=StemmingAnalyzer(), stored=True)
     )
 
+    # sentiment_value needs to be treated as an Integer with decimals in order to sort by this field
     if type_of_index == 'sentiment':
         schema.add('sentiment_value', NUMERIC(int, sortable=True, stored=True, decimal_places=accuracy))
 
