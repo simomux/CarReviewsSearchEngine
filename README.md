@@ -9,7 +9,7 @@ Creates approximately 300,000 files from a specified `.csv` file given as the fi
 A parallel version of the script `dataset_generator.py` that utilizes threads to parallelize the computation, reducing the time by approximately 33%. This conclusion is based on various tests conducted on different PCs.
 
 ### `index_generator.py`
-This script creates the inverted index from the files generated with `main.py`, taking the directory of the files as the first argument. The inverted index is then saved in the current directory.
+This script creates the inverted index from the files generated with `dataset_generator.py`, taking the directory of the files as the first argument. The inverted index is then saved in the current directory.
 
 #### Schema definition:
 - `file`: field that contains the filename of a review
