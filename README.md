@@ -60,6 +60,6 @@ A dedicated version of `query.py` for this index still needs to be done. To avoi
 
 You can create the index for sentiment analysis by using `'sentiment'` (NOT ADVISED), which calculates the sentiment of each file one-by-one and stores it in a dedicated field of the index. I still advise downloading the index directly and avoiding this, since creating the final version of the sentiment index took me more than 7 hours.
 
-Otherwise, you can download the indexes from the link above (use your unimore email to avoid confirmation (due to security reasons I can't avoid this issue)) and run directly `query.py` as such: `python3 -s query.py <index_path>`.
+Otherwise, you can download the indexes from the link above (use your unimore email to avoid confirmation (due to security reasons I can't avoid this issue)) and run directly `query.py` as such: `python3 -s query.py <index_directory_path>`.
 
 Project Members: Mussini Simone, Siena Andrea, Stomeo Paride
