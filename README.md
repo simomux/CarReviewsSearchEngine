@@ -45,21 +45,21 @@ Model used to query: BM25F
 Tuned values: `B=0.1, K1=2`
 
 ## Useful files:
-- Dataset: [Link to the dataset](https://www.kaggle.com/datasets/shreemunpranav/edmunds-car-review)
-- Inverted Index for Full-Text: [Link to Full-Text Index](https://drive.google.com/file/d/1rwNIl725d7ug45m5RFE_aRxU0uqTyNR2/view?usp=sharing)
-- Inverted Index for sentiment analysis: [Link to Sentiment Index](https://drive.google.com/file/d/1ggdReHMKaxeG5WlapKw9uScdcjLCSWzg/view?usp=sharing)
-- Word2Vec pre-trained module: [Link to Word2Vec Module](https://drive.google.com/file/d/1ETwOSYF64x_tY-q42RXIpjtOPBYngPIx/view?usp=sharing)
+- Dataset: [Link to the Kaggle dataset](https://www.kaggle.com/datasets/shreemunpranav/edmunds-car-review)
+- Complete inverted index: [Link to Inverted Index](*TODO*)
+- Word2Vec pre-trained module: [Link to Word2Vec Module](https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM/edit?resourcekey=0-wjGZdNAUop6WykTtMip30g)
+- Demo version on the inverted index: [Link to the Inverted Index demo](*TODO*)
 
 ## How to use:
-You can create the index starting from the dataset (NOT ADVISED) by downloading the dataset from the link above and pasting it in the project directory and by running `dataset_generator.py` as such: `python3 -s dataset_generator.py review.csv <output_directory>`.
+You can create the index starting from the dataset by downloading the dataset from the link above and pasting it in the project directory and by running `dataset_generator.py` as such: `python3 -s dataset_generator.py review.csv <output_directory>`.
 
 Once you have created the dataset, you have basically split the `.csv` creating a file for each review, you can run `index_generator` and actually create the inverted index, by using the following command: `python3 -s <dataset_directory> <type_of_index>`.
 
 You can create the simple Full-Text index by using `'full-text'` as the second argument. This creates a simple Full-Text index.
 A dedicated version of `query.py` for this index still needs to be done. To avoid this problem use the index for sentiment analysis.
 
-You can create the index for sentiment analysis by using `'sentiment'` (NOT ADVISED), which calculates the sentiment of each file one-by-one and stores it in a dedicated field of the index. I still advise downloading the index directly and avoiding this, since creating the final version of the sentiment index took me more than 7 hours.
+You can create the index for sentiment analysis by using `'sentiment'`, which calculates the sentiment of each file one-by-one and stores it in a dedicated field of the index. I still advise downloading the index directly and avoiding this, since creating the final version of the sentiment index took me more than 7 hours.
 
-Otherwise, you can download the indexes from the link above (use your unimore email to avoid confirmation (due to security reasons I can't avoid this issue)) and run directly `query.py` as such: `python3 -s query.py <index_directory_path>`.
+Otherwise, you can download the entire index, or a demo version of it with only 20,000 files from the link above (use your unimore email to avoid confirmation (due to security reasons I can't avoid this issue)) and run directly `query.py` as such: `python3 -s query.py <index_directory_path>`.
 
 Project Members: Mussini Simone, Siena Andrea, Stomeo Paride
