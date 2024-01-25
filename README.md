@@ -48,7 +48,7 @@ Tuned values: `B=0.1, K1=2`
 - Dataset: [Link to the Kaggle dataset](https://www.kaggle.com/datasets/shreemunpranav/edmunds-car-review)
 - Complete inverted index: [Link to Inverted Index](*TODO*)
 - Word2Vec pre-trained module: [Link to Word2Vec Module](https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM/edit?resourcekey=0-wjGZdNAUop6WykTtMip30g)
-- Demo version on the inverted index: [Link to the Inverted Index demo](*TODO*)
+- Demo version on the inverted index: [Link to the Inverted Index demo](https://www.mediafire.com/file/5mjbepqibwqd1le/indexdirRidotto.zip/file)
 
 ## How to use:
 You can create the index starting from the dataset by downloading the dataset from the link above and pasting it in the project directory and by running `dataset_generator.py` as such: `python3 -s dataset_generator.py review.csv <output_directory>`.
