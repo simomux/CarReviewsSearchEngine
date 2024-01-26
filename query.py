@@ -7,7 +7,7 @@ import blessed
 from whoosh.qparser import MultifieldParser  # , QueryParser
 from whoosh.qparser.plugins import FuzzyTermPlugin
 import custom_model
-from whoosh.scoring import BM25F
+# from whoosh.scoring import BM25F
 
 # Word2Vec modules
 from gensim.models import KeyedVectors
@@ -40,9 +40,10 @@ def printResults(results):
         print(f"File: {hit['file']}")
         print(f"Title: {hit['title']}")
         print(f"Author: {hit['author']}")
+        print(f"Rating: {hit['rating']}")
         print(f"Made on: {hit['date'].date()}")
         print(f"Matches: {hit.matched_terms()}")
-        print(f"Sentiment: {hit['sentiment']}, {hit['sentiment_value']}")
+        print(f"Sentiment: {hit['sentiment_type']}, {hit['sentiment_value']}")
 
         print(f"Score: {round(hit.score, 4)}")
         print("---------------\n")
@@ -88,7 +89,7 @@ if __name__ == "__main__":
     parser.add_argument(dest='indexdir', metavar="DIRECTORY", help="The directory of the index")
     ix = index.open_dir(parser.parse_args().__getattribute__('indexdir'))  # Open index directory
 
-    with ix.searcher(weighting=custom_model.SentimentModel) as searcher:
+    with ix.searcher(weighting=custom_model.SentimentModelBM25F) as searcher:
         # Boosts score if query arguments are found in metadate of review
         boost = {
             "maker": 2,

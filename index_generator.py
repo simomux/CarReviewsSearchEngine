@@ -26,12 +26,12 @@ def index_files_in_directory(directory):
         model=ID(stored=True),
         year=NUMERIC,
         author=STORED,
-        date=DATETIME(stored=True, sortable=True),
+        date=DATETIME(stored=True),
         title=STORED,
         rating=NUMERIC(stored=True),
         content=TEXT(analyzer=StemmingAnalyzer(), stored=True),
         sentiment_value=NUMERIC(stored=True),
-        sentiment=KEYWORD(stored=True)
+        sentiment_type=KEYWORD(stored=True)
     )
 
     # Index directory creation
