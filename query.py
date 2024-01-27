@@ -9,12 +9,6 @@ from whoosh.qparser.plugins import FuzzyTermPlugin
 import custom_model
 # from whoosh.scoring import BM25F
 
-# Word2Vec modules
-from gensim.models import KeyedVectors
-from sklearn.metrics.pairwise import cosine_similarity
-from whoosh import index
-from whoosh.analysis import StemmingAnalyzer
-
 # Create terminal for UI management
 term = blessed.Terminal()
 

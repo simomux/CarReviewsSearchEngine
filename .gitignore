@@ -1,5 +1,5 @@
 *.csv
-myenv/
+*env/
 *indexdir/
 testing/
 __pycache__/

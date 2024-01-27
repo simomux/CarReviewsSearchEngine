@@ -1,3 +1,5 @@
+Certainly! Here's an improved version of your markdown file with the suggested changes:
+
 # Project for the Information Management Exam A.Y. 2023/2024
 
 ## Modules Content
@@ -11,11 +13,11 @@ A parallel version of the script `dataset_generator.py` that utilizes threads to
 ### `index_generator.py`
 This script creates the inverted index from the files generated with `dataset_generator.py`, taking the directory of the files as the first argument. The inverted index is then saved in the current directory.
 
-#### Schema definition:
-- `file`: field that contains the filename of a review
-- `maker`: car manufacturer of the car reviewed
-- `model`: car model of the car reviewed
-- `year`: year of the car reviewed
+#### Index Schema definition:
+- `file`: filename of a review
+- `maker`: car manufacturer of the reviewed car
+- `model`: car model of the reviewed car
+- `year`: year of the reviewed car
 - `author`: author of the review
 - `date`: date of the review
 - `title`: title of the review
@@ -35,31 +37,46 @@ Main search functions and syntax:
 - Fuzzy search: `word~`
 - Digit `0` for exit
 
-Sorting functions:
-- Sorting by date (sort results by the most recent date that matches the query and then print the top 10)
-- Show sentiment of the top 10 Full-Text search results
-- Sorting by sentiment (sort results by sentiment that matches the query and then print the top 10)
-- STILL WIP: Sorting by Word2Vec (sort results by cosine similarity that matches the query and then print the top 10)
+### `custom_model.py`
+Module that contains the classes and methods for the custom scoring of the various models.
 
-Model used to query: BM25F
-Tuned values: `B=0.1, K1=2`
+Current models:
+- **Full-Text model:** Uses BM25F scoring with a slight tune to the free variables `B` and `K1`. Model used to query: BM25F Tuned values: `B=0.1, K1=2`
+
+- **Sentiment model:** Uses the sentiment of the review to influence the score. It has 2 different types of scoring:
+  - **Scoring with sentiment value:** Utilizes just the sentiment value of the review to influence the final score with the formula: `final_score = score * sentiment_value`
+
+  - **Scoring with sentiment value and ranking:** Utilizes the sentiment value and the rating of the review to fix the score, avoiding any possible discordances with the rating and the sentiment value. It uses a series of formulae based on the type of sentiment:
+
+    - **Positive sentiment:** `final_score = score * sentiment_value * rating/5`
+    - **Negative sentiment:** `final_score = score * sentiment_value * 1.2 - rating/5`
+    - **Neutral sentiment:** `if rating > 3: final_score = score * sentiment_value * 0.4 - rating/5` or `if rating < 3: final_score = score * sentiment_value * 0.4 + rating/5`
 
 ## Useful files:
-- Dataset: [Link to the Kaggle dataset](https://www.kaggle.com/datasets/shreemunpranav/edmunds-car-review)
-- Complete inverted index: [Link to Inverted Index](*TODO*)
-- Word2Vec pre-trained module: [Link to Word2Vec Module](https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM/edit?resourcekey=0-wjGZdNAUop6WykTtMip30g)
-- Demo version on the inverted index: [Link to the Inverted Index demo](https://www.mediafire.com/file/5mjbepqibwqd1le/indexdirRidotto.zip/file)
+- Dataset: [Kaggle dataset](https://www.kaggle.com/datasets/shreemunpranav/edmunds-car-review)
+- Complete inverted index: [Link to be added later]()
+- Pre-trained sentiment model: [Huggingface page](https://huggingface.co/cardiffnlp/twitter-roberta-base-sentiment-latest)
+- Demo version on the inverted index (~20,000 reviews): [Inverted Index demo](https://www.mediafire.com/file/5mjbepqibwqd1le/indexdirRidotto.zip/file)
 
 ## How to use:
-You can create the index starting from the dataset by downloading the dataset from the link above and pasting it in the project directory and by running `dataset_generator.py` as such: `python3 -s dataset_generator.py review.csv <output_directory>`.
 
-Once you have created the dataset, you have basically split the `.csv` creating a file for each review, you can run `index_generator` and actually create the inverted index, by using the following command: `python3 -s <dataset_directory> <type_of_index>`.
+- **Creation of dataset:** You can create the index starting from the dataset by downloading it from the link above and pasting it in the project directory. Run `dataset_generator.py` as follows:
+  ```python3 -s dataset_generator.py review.csv <output_directory>```
 
-You can create the simple Full-Text index by using `'full-text'` as the second argument. This creates a simple Full-Text index.
-A dedicated version of `query.py` for this index still needs to be done. To avoid this problem use the index for sentiment analysis.
 
-You can create the index for sentiment analysis by using `'sentiment'`, which calculates the sentiment of each file one-by-one and stores it in a dedicated field of the index. I still advise downloading the index directly and avoiding this, since creating the final version of the sentiment index took me more than 7 hours.
+- **Creation of inverted index:** Once you have created the dataset, you can run `index_generator.py` to create the inverted index. Use the following command:
+  ```python3 -s <dataset_directory>```
+  I suggest trying the demo of the index before creating the entire one, as this script calculates the sentiment of each file during the index generation, and depending on the specs of your PC, this might take a while (It took me ~8 hours for the 1st version of the complete one and ~20 min for the demo one).
 
-Otherwise, you can download the entire index, or a demo version of it with only 20,000 files from the link above (use your unimore email to avoid confirmation (due to security reasons I can't avoid this issue)) and run directly `query.py` as such: `python3 -s query.py <index_directory_path>`.
 
-Project Members: Mussini Simone, Siena Andrea, Stomeo Paride
+- **Querying the index:** After you have downloaded or created the index, you can start querying it. Run `query.py` as follows:
+  ```python3 -s query.py <index_directory_path>```
+
+## Requirements
+This project was developed and tested with Python 3.11.5 ([Download here](https://www.python.org/downloads/release/python-3115/)). Any use of a different version might cause errors.
+
+Module requirements are listed in `requirements.txt`.
+
+For any info or questions, feel free to contact Mussini Simone at [mussini.simone01@outlook.com](mailto:mussini.simone01@outlook.com).
+
+Project members: [Mussini Simone](https://github.com/simomux), [Siena Andrea](https://github.com/CodKyrat47), [Stomeo Paride](https://github.com/SupremeXGucci420)
