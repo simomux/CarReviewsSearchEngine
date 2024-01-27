@@ -1,5 +1,3 @@
-Certainly! Here's an improved version of your markdown file with the suggested changes:
-
 # Project for the Information Management Exam A.Y. 2023/2024
 
 ## Modules Content
