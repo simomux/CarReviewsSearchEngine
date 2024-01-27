@@ -89,7 +89,7 @@ if __name__ == "__main__":
     parser.add_argument(dest='indexdir', metavar="DIRECTORY", help="The directory of the index")
     ix = index.open_dir(parser.parse_args().__getattribute__('indexdir'))  # Open index directory
 
-    with ix.searcher(weighting=custom_model.SentimentModelBM25F) as searcher:
+    with ix.searcher(weighting=custom_model.FullTextModel) as searcher:
         # Boosts score if query arguments are found in metadate of review
         boost = {
             "maker": 2,
