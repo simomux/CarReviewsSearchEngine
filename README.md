@@ -19,7 +19,7 @@ This script creates the inverted index from the files generated with `dataset_ge
 - `author`: author of the review
 - `date`: date of the review
 - `title`: title of the review
-- `rating`: rating of the review (still WIP; might use it to fix false results from sentiment)
+- `rating`: rating of the review
 - `content`: actual review
 
 ### `query.py`
