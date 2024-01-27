@@ -49,40 +49,6 @@ def printResults(results):
         print("---------------\n")
 
 
-def word2vec(results, query):
-    # Tokenize and preprocess reference text
-    analyzer = StemmingAnalyzer()
-    tokens_reference = [token.text for token in analyzer(query) if token.text.lower() in model]
-    vector_reference = model[tokens_reference].mean(axis=0) if tokens_reference else None
-
-    # Calculate similarity scores for each text
-    similarity_scores = []
-    for result in results:
-        text = result['content']
-        tokens_text = [token.text for token in analyzer(text) if token.text.lower() in model]
-        vector_text = model[tokens_text].mean(axis=0) if tokens_text else None
-
-        if vector_reference is not None and vector_text is not None:
-            similarity_score = cosine_similarity([vector_reference], [vector_text])[0][0]
-            # model.cosine_similarities(vector_reference, [vector_text])
-            similarity_scores.append((result['file'], similarity_score))
-        else:
-            similarity_scores.append((result['file'], None))
-
-    # Sort based on similarity scores (higher scores first)
-    sorted_texts = sorted(similarity_scores, key=lambda x: x[1], reverse=True)
-
-    # Display the sorted texts
-    for text, similarity_score in sorted_texts[:10]:
-        print(f"Similarity Score: {similarity_score:.4f} - {text}")
-
-    '''
-    analogy_result = model.most_similar(positive=['woman', 'king'], negative=['man'], topn=1)
-    print(f"Word most similar to 'king - man + woman': {analogy_result[0][0]}")
-    print(model.doesnt_match(['fire', 'water', 'land', 'sea', 'air', 'car']))
-    '''
-
-
 if __name__ == "__main__":
     # Argument control
     parser = argparse.ArgumentParser("Whoosh Query")
@@ -146,14 +112,3 @@ if __name__ == "__main__":
             # Gives time to see results number
             time.sleep(2)
             printResults(results)
-
-            # Sort results by Word2Vec
-            # Still need to be optimized
-            choice = input(term.orangered("\nDo you want to sort results by similarity? (y/n) "))
-            if choice.lower().strip() == "y":
-                # Load pre-trained Word2Vec model
-                model_path = '../progettoGestione/GoogleNews-vectors-negative300.bin'
-                model = KeyedVectors.load_word2vec_format(model_path, binary=True)  # limit=1000000)
-
-                results = searcher.search(query, limit=None, terms=True)
-                word2vec(results, query_text)
