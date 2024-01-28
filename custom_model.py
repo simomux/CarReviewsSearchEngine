@@ -128,13 +128,13 @@ class SentimentModelRatingTFIDF(TF_IDF):
 
 
 class Word2VecModel(BM25F):
-    se_final = True
+    use_final = True
     query_input = ""
     loaded_data_dict = {}
     model = gensim.models.Word2Vec.load("word2vec_review.model")  # window=5, min_count=5
 
     def __init__(self, loaded_data_dict):
-        super().__init__(B=0.75, K1=1.5)
+        super().__init__(B=0.5, K1=1.5)
         self.loaded_data_dict = loaded_data_dict
 
     def set_query(self, query):

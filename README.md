@@ -76,7 +76,7 @@ Current models:
   I suggest trying the demo of the index before creating the entire one, as this script calculates the sentiment of each file during the index generation, and depending on the specs of your PC, this might take a while (It took me ~8 hours for the 1st version of the complete one and ~20 min for the demo one).
 
 
-- **Querying the index:** After you have downloaded or created the index, you can now download the word2Vec model and the Word2Vec vectors in the working directory. Then simply run `query.py` as follows:
+- **Querying the index:** After you have downloaded or created the index, you can now download the Word2Vec model and the Word2Vec vectors in the working directory. Then simply run `query.py` as follows:
   ```python3 -s query.py <index_directory_path>```.
 
 ## Requirements
