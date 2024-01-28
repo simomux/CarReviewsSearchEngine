@@ -119,11 +119,12 @@ if __name__ == "__main__":
             uiPrint()
 
             query_text = input(term.orangered("\n\nInsert the query: "))
-            if model == '7':
-                weighting_model.set_query(query_text)
 
             if query_text == "0":
                 break
+
+            if model == '7':
+                weighting_model.set_query(query_text)
 
             query = query_parser.parse(query_text)
 
@@ -132,34 +133,38 @@ if __name__ == "__main__":
                 print("No results found")
 
                 #  Did you mean?
-                if model != '7':
-                    didyoumean_choice = input(term.orangered("\n\nDid you mean? (y/n) "))
-                    if didyoumean_choice.lower().strip() == "y":
-                        try:
-                            new_query = searcher.correct_query(query, query_text)
-                        except (ValueError, TypeError, AttributeError) as e:
-                            # Some queries with exact matches and long numbers don't work with searcher.correct_query()
-                            # method because of the type they get converted to by the query_parser
-                            print("Impossible to correct query with this syntax!\n")
-                            time.sleep(1)
-                            continue
+                didyoumean_choice = input(term.orangered("\n\nDid you mean? (y/n) "))
+                if didyoumean_choice.lower().strip() == "y":
+                    try:
+                        new_query = searcher.correct_query(query, query_text)
+                    except (ValueError, TypeError, AttributeError) as e:
+                        # Some queries with exact matches and long numbers don't work with searcher.correct_query()
+                        # method because of the type they get converted to by the query_parser
+                        print("Impossible to correct query with this syntax!\n")
+                        time.sleep(1)
+                        continue
 
-                        print(f"New query: {new_query.string}")
+                    print(f"New query: {new_query.string}")
 
-                        # Check if the query is different from the original one
-                        if new_query.string == query_text:
-                            print("Couldn't find a correct version of the query")
-                            continue
-                        results = searcher.search(new_query.query, limit=10, terms=True)
+                    # Check if the query is different from the original one
+                    if new_query.string == query_text:
+                        print("Couldn't find a correct version of the query")
+                        continue
 
-                        if len(results) == 0:
-                            print("No results found with the new query")
-                            continue
+                    # Give the new query to the model
+                    if model == '7':
+                        weighting_model.set_query(new_query.string)
 
-                        # Allow did you mean results to get sorted
-                        query = new_query.query
+                    results = searcher.search(new_query.query, limit=10, terms=True)
+
+                    if len(results) == 0:
+                        print("No results found with the new query")
+                        continue
+
+                    # Allow did you mean results to get sorted
+                    query = new_query.query
 
             print(term.orangered('\nRESULTS:') + str(len(results)))
             # Gives time to see results number
-            time.sleep(2)
+            time.sleep(1)
             printResults(results)

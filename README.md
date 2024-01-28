@@ -35,7 +35,7 @@ Main search functions and syntax:
 - Fuzzy search: `word~`
 - Digit `0` for exit
 
-Wildcards don't work on query with specified fields (ex. `maker:a*`), because `maker` and `model` fields are set as ID to avoid the preprocessing of them, since it worse the query results. 
+Wildcards don't work on query with specified fields (ex. `maker:a*`), because `maker` and `model` fields are set as ID in the schema definition to avoid the preprocessing of them, since it worsen the query results. 
 
 ### `custom_model.py`
 Module that contains the classes and methods for the custom scoring of the various models.
@@ -76,7 +76,7 @@ Current models:
   I suggest trying the demo of the index before creating the entire one, as this script calculates the sentiment of each file during the index generation, and depending on the specs of your PC, this might take a while (It took me ~8 hours for the 1st version of the complete one and ~20 min for the demo one).
 
 
-- **Querying the index:** After you have downloaded or created the index, you can start querying it. Run `query.py` as follows:
+- **Querying the index:** After you have downloaded or created the index, you can now download the word2Vec model and the Word2Vec vectors in the working directory. Then simply run `query.py` as follows:
   ```python3 -s query.py <index_directory_path>```.
 
 ## Requirements
