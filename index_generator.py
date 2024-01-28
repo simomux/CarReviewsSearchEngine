@@ -1,3 +1,7 @@
+# How to use:
+# Tested with Python 3.11.5
+# Run python3 -s index_generator.py <dataset_directory>
+
 import sys
 import time
 import os

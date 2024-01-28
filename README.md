@@ -63,7 +63,7 @@ Current models:
 
 
 - **Creation of inverted index:** Once you have created the dataset, you can run `index_generator.py` to create the inverted index. Use the following command:
-  ```python3 -s <dataset_directory>```
+  ```python3 -s index_generator.py <dataset_directory>```
   I suggest trying the demo of the index before creating the entire one, as this script calculates the sentiment of each file during the index generation, and depending on the specs of your PC, this might take a while (It took me ~8 hours for the 1st version of the complete one and ~20 min for the demo one).
 
 

@@ -1,3 +1,7 @@
+# How to use:
+# Tested with Python 3.11.5
+# Run python3 -s concurrent_generator.py review.csv <output_directory>
+
 import csv
 import sys
 import os

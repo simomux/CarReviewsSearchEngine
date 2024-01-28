@@ -1,8 +1,5 @@
 *.csv
-*env/
-*indexdir/
+*.model
+*.json
+*indexdir*/
 testing/
-__pycache__/
-.DS_Store
-GoogleNews-vectors-negative300.bin
-```
