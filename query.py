@@ -68,10 +68,7 @@ def printResults(results):
     for hit in results:
         print(f"File: {hit['file']}")
         print(f"Title: {hit['title']}")
-        print(f"Author: {hit['author']}")
         print(f"Rating: {hit['rating']}")
-        print(f"Made on: {hit['date'].date()}")
-        print(f"Matches: {hit.matched_terms()}")
         print(f"Sentiment: {hit['sentiment_type']}, {hit['sentiment_value']}")
 
         print(f"Score: {round(hit.score, 4)}")
