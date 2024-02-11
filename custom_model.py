@@ -99,7 +99,6 @@ class SentimentModelBM25F(FullTextModel):
     use_final = True
 
     def final(self, searcher, docnum, score):
-        # Uncomment the score method you want to use
         return sentiment_score(searcher.stored_fields(docnum), score)
 
 
@@ -107,7 +106,6 @@ class SentimentModelRatingBM25F(FullTextModel):
     use_final = True
 
     def final(self, searcher, docnum, score):
-        # Uncomment the score method you want to use
         return sentiment_score2(searcher.stored_fields(docnum), score)
 
 
@@ -115,7 +113,6 @@ class SentimentModelTFIDF(TF_IDF):
     use_final = True
 
     def final(self, searcher, docnum, score):
-        # Uncomment the score method you want to use
         return sentiment_score(searcher.stored_fields(docnum), score)
 
 
@@ -123,7 +120,6 @@ class SentimentModelRatingTFIDF(TF_IDF):
     use_final = True
 
     def final(self, searcher, docnum, score):
-        # Uncomment the score method you want to use
         return sentiment_score2(searcher.stored_fields(docnum), score)
 
 
