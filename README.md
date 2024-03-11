@@ -1,4 +1,4 @@
-# Project for the Information Management Exam A.Y. 2023/2024
+# Project for my Information Management Exam A.Y. 2023/2024
 
 ## Modules Content
 
