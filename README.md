@@ -2,13 +2,13 @@
 
 ## Modules Content
 
-### `dataset_generator.py`
+### [dataset_generator.py](https://github.com/simomux/progettoGestione/blob/a0489d38bbda6fa0dfb621d6adf7c1a8be7930d3/dataset_generator.py)
 Creates approximately 300,000 files from a specified `.csv` file given as the first argument and stores them in a directory specified as the second argument. Each file corresponds to a line in the `.csv` file, with each argument separated by a newline. This forms the base dataset for the creation of the inverted index.
 
-### `concurrent.py`
-A parallel version of the script `dataset_generator.py` that utilizes threads to parallelize the computation, reducing the time by approximately 33%. This conclusion is based on various tests conducted on different PCs.
+### [concurrent_generator.py](https://github.com/simomux/progettoGestione/blob/a0489d38bbda6fa0dfb621d6adf7c1a8be7930d3/concurrent_generator.py)
+A parallel version of the script `dataset_generator.py` that concurrently create the dataset, reducing the time by approximately 33%. This conclusion is based on various tests conducted on different PCs.
 
-### `index_generator.py`
+### [index_generator.py](https://github.com/simomux/progettoGestione/blob/a0489d38bbda6fa0dfb621d6adf7c1a8be7930d3/index_generator.py)
 This script creates the inverted index from the files generated with `dataset_generator.py`, taking the directory of the files as the first argument. The inverted index is then saved in the current directory.
 
 #### Index Schema definition:
@@ -22,7 +22,7 @@ This script creates the inverted index from the files generated with `dataset_ge
 - `rating`: rating of the review
 - `content`: actual review
 
-### `query.py`
+### [query.py](https://github.com/simomux/progettoGestione/blob/a0489d38bbda6fa0dfb621d6adf7c1a8be7930d3/query.py)
 A script that works on the directory of the index (needs to be in the working directory) and allows asking queries on the inverted index.
 
 Main search functions and syntax:
@@ -37,7 +37,7 @@ Main search functions and syntax:
 
 Wildcards don't work on query with specified fields (ex. `maker:a*`), because `maker` and `model` fields are set as ID in the schema definition to avoid the preprocessing of them, since it worsen the query results. 
 
-### `custom_model.py`
+### [custom_model.py](https://github.com/simomux/progettoGestione/blob/a0489d38bbda6fa0dfb621d6adf7c1a8be7930d3/custom_model.py)
 Module that contains the classes and methods for the custom scoring of the various models.
 
 Current models:
@@ -86,4 +86,4 @@ Module requirements are listed in `requirements.txt`.
 
 For any info or questions, feel free to contact Mussini Simone at [mussini.simone01@outlook.com](mailto:mussini.simone01@outlook.com).
 
-Project members: [Mussini Simone](https://github.com/simomux), [Siena Andrea](https://github.com/CodKyrat47), [Stomeo Paride](https://github.com/SupremeXGucci420)
+Project members: [Mussini Simone](https://github.com/simomux), [Siena Andrea](https://github.com/CodKyrat47), [Stomeo Paride](https://github.com/paridestomeo)
