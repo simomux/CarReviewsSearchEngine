@@ -1,5 +1,8 @@
 # Project for my Information Management Exam A.Y. 2023/2024
 
+## Abstract
+Buying a new car can be tricky and complicated due to the vast number of carmakers and models, each with its own pros, cons, and special features. This search engine aims to help people filter down reviews for car models, suggesting the most interesting and relevant ones to them first.
+
 ## Modules Content
 
 ### [dataset_generator.py](https://github.com/simomux/progettoGestione/blob/a0489d38bbda6fa0dfb621d6adf7c1a8be7930d3/dataset_generator.py)
@@ -82,8 +85,6 @@ Current models:
 ## Requirements
 This project was developed and tested with Python 3.11.5 ([Download here](https://www.python.org/downloads/release/python-3115/)). Any use of a different version might cause errors.
 
-Module requirements are listed in `requirements.txt`.
-
-For any info or questions, feel free to contact Mussini Simone at [mussini.simone01@outlook.com](mailto:mussini.simone01@outlook.com).
+Module requirements are listed in [requirements.txt](https://github.com/simomux/CarReviewsSearchEngine/blob/5fb045b1c24db719de011c4c2bc6061400b77e35/requirements.txt).
 
 Project members: [Mussini Simone](https://github.com/simomux), [Siena Andrea](https://github.com/CodKyrat47), [Stomeo Paride](https://github.com/paridestomeo)
